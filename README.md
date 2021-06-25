@@ -1,7 +1,7 @@
 # BapApiSqlite
-##Team
+## Team
 
-*Courtney                                                                                                                                                                                                                                                                       
+* Courtney                                                                                                                                                                                                                                                                       
 
 ## Overview
 
