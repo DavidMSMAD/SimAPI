@@ -62,6 +62,18 @@ namespace BapApi.Controllers
             return storeTopTen; 
         }
 
+        [HttpGet("GetPage/{start}")]
+        public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetPageSet(int start)
+        {
+            var pageSet = await _context.StoreApps.Select(x => StoreAppToDTO(x)).Skip(start).Take(25).ToListAsync();
+
+            if (pageSet == null)
+            {
+                return NotFound();
+            }
+
+            return pageSet;
+        }
         // POST: api/StoreApps
         // Add a new record to the database
 
