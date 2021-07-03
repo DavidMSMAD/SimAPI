@@ -102,6 +102,23 @@ namespace BapApi.Controllers
             return pageSet;
         }
 
+        //API get search results
+        [HttpGet("Search")]
+        public async Task<ActionResult<StoreAppDTO>> GetSearchApp(string SearchTerm)
+        {
+            var lowerCaseSearchTerm = SearchTerm.Trim().ToLower();
+            var searchApp = await _context.StoreApps
+                .Where(a => a.Name.ToLower()
+                .Contains(lowerCaseSearchTerm) || a.Category.ToLower().Contains(lowerCaseSearchTerm))
+                .Take(100).ToListAsync();
+
+            if (searchApp == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(searchApp);
+        }
 
 
         // POST: api/StoreApps
