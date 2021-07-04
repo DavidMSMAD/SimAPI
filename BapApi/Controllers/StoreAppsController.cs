@@ -62,6 +62,20 @@ namespace BapApi.Controllers
             return storeTopTen;
         }
 
+        [HttpGet("TopTenApps")]
+        public async Task<ActionResult<IEnumerable<StoreApp>>> GetStoreTopTenApps()
+        {
+
+            var storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Rating).ThenByDescending(x =>x.People).Take(10).ToListAsync();
+
+            if (storeTopTenApps == null)
+            {
+                return NotFound();
+            }
+
+            return storeTopTenApps;
+        }
+
         [HttpGet("GetPage/{start}")]
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetPageSet(int start)
         {
