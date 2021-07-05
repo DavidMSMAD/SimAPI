@@ -139,9 +139,11 @@ namespace BapApi.Controllers
         // POST: api/StoreApps
         // Add a new record to the database
         [HttpPost]
+
+        // This line posts posts to the api by calling the object inside the paramters 
         public async Task<ActionResult<StoreAppDTO>> PostAddApp(StoreAppDTO storeAppDTO)
         {
-            //var todoItem = new StoreAppDTO
+            // This creates an object in the api
             var storeApp = new StoreApp
             {
                 Id = storeAppDTO.Id,
@@ -154,9 +156,11 @@ namespace BapApi.Controllers
 
             };
 
+            // this line has the api wait for it to be sent to the api
             _context.StoreApps.Add(storeApp);
             await _context.SaveChangesAsync();
 
+            // This line returns the post that you sent to the api
             return CreatedAtAction(
                 nameof(GetStoreApp),
                 new { id = storeApp.Id },
