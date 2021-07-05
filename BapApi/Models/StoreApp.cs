@@ -32,4 +32,11 @@ namespace BapApi.Models
     {
         public string Name { get; set; }
     }
+
+    public class CountModel
+    {
+        public int Count { get; set;}
+    }
+    
+    
 }

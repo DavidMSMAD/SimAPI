@@ -168,7 +168,6 @@ namespace BapApi.Controllers
         }
 
         //Get page 
-        //Test comment
         [HttpGet("GetPage/{start}")]
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetPageSet(int start)
         {
@@ -198,6 +197,16 @@ namespace BapApi.Controllers
 
             return pageSet;
         }
+
+        [HttpGet("DataSize")]
+        public int GetDataSize()
+        {
+            var count = _context.StoreApps.Count();
+
+            return count;
+        }
+
+
 
         //Get list of categories
         [HttpGet("CategoryNames")]
