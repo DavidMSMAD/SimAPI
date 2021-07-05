@@ -27,4 +27,9 @@ namespace BapApi.Models
         public string Value { get; set; }
         public int Count { get; set; }
     }
+
+    public class NameModel
+    {
+        public string Name { get; set; }
+    }
 }

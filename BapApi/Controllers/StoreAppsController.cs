@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BapApi.Models;
+using System.Net.Http;
 
 namespace BapApi.Controllers
 {
@@ -62,6 +63,20 @@ namespace BapApi.Controllers
             return storeTopTen;
         }
 
+        [HttpGet("TopTenApps")]
+        public async Task<ActionResult<IEnumerable<StoreApp>>> GetStoreTopTenApps()
+        {
+
+            var storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Rating).ThenByDescending(x =>x.People).Take(10).ToListAsync();
+
+            if (storeTopTenApps == null)
+            {
+                return NotFound();
+            }
+
+            return storeTopTenApps;
+        }
+
         [HttpGet("GetPage/{start}")]
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetPageSet(int start)
         {
@@ -75,25 +90,29 @@ namespace BapApi.Controllers
             return pageSet;
         }
 
-        [HttpGet("Search/Rating/{value}")]
-        public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetSearch(string column, double value)
+        //Gets Ratings for barchart
+        [HttpGet("BarChart")]
+        public IEnumerable<BarChartValues> GetBarChart(string category)
         {
-            var pageSet = await _context.StoreApps.Where(q => q.Rating == value).Select(x => StoreAppToDTO(x)).ToListAsync();
+            var pageSet = _context.StoreApps.Where(q => q.Category.ToUpper() == category.ToUpper())
+                                            .GroupBy(q => q.Rating)
+                                            .Select(group => new BarChartValues{Value = group.Key
+                                            .ToString(), Count = group.Count()});
 
             if (pageSet == null)
             {
-                return NotFound();
+                //return NotFound();
             }
 
             return pageSet;
         }
 
-        [HttpGet("BarChart/Rating")]
-        public IEnumerable<BarChartValues> GetBarChart()
+        [HttpGet("CategoryNames")]
+        public IEnumerable<NameModel> GetCategoryNames()
         {
-            var pageSet = _context.StoreApps.GroupBy(q => q.Rating)
-                          .Select(group => new BarChartValues{Value = group.Key.ToString(), Count = group.Count()});
-
+            var pageSet = _context.StoreApps.GroupBy(q => q.Category)
+                                            .Select(group => new NameModel { Name = group.Key.ToString() });
+                                            
             if (pageSet == null)
             {
                 //return NotFound();
@@ -123,6 +142,30 @@ namespace BapApi.Controllers
 
         // POST: api/StoreApps
         // Add a new record to the database
+        [HttpPost]
+        public async Task<ActionResult<StoreAppDTO>> PostAddApp(StoreAppDTO storeAppDTO)
+        {
+            //var todoItem = new StoreAppDTO
+            var storeApp = new StoreApp
+            {
+                Id = storeAppDTO.Id,
+                Name = storeAppDTO.Name,
+                Rating = storeAppDTO.Rating,
+                People = storeAppDTO.People,
+                Category = storeAppDTO.Category,
+                Date = storeAppDTO.Date,
+                Price = storeAppDTO.Price
+
+            };
+
+            _context.StoreApps.Add(storeApp);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetStoreApp),
+                new { id = storeApp.Id },
+                storeApp);
+        }
 
         // Delete: api/StoreApps/1
         // Delete a single row from the database by Id
@@ -155,13 +198,6 @@ namespace BapApi.Controllers
                 Category = storeApp.Category,
                 Date = storeApp.Date,
                 Price = storeApp.Price
-            };
-
-        private static BarChartValues BarChartDTO(BarChartValues chartValues) =>
-            new BarChartValues
-            {
-                Value = chartValues.Value,
-                Count = chartValues.Count
             };
 
     }
