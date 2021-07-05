@@ -169,10 +169,7 @@ namespace BapApi.Controllers
 
         // Delete: api/StoreApps/1
         // Delete a single row from the database by Id
-        
-        //currently not working
-        //[HttpDelete("{id}")]
-        [HttpDelete("Delete")]
+       [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStoreApps(long id)
         {
             var StoreApps = await _context.StoreApps.FindAsync(id);
