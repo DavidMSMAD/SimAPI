@@ -53,5 +53,5 @@ jobs:
       with:
         app-name: 'team5-api'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_f031b48f234942e0a65d709c570399e2 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_90cd870ee0c7470c94d3f52dd1901534 }}
         package: .
