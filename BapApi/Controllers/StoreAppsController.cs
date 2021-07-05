@@ -75,24 +75,14 @@ namespace BapApi.Controllers
             return pageSet;
         }
 
-        [HttpGet("Search/Rating/{value}")]
-        public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetSearch(string column, double value)
+        //Gets Ratings for barchart
+        [HttpGet("BarChart")]
+        public IEnumerable<BarChartValues> GetBarChart(string category)
         {
-            var pageSet = await _context.StoreApps.Where(q => q.Rating == value).Select(x => StoreAppToDTO(x)).ToListAsync();
-
-            if (pageSet == null)
-            {
-                return NotFound();
-            }
-
-            return pageSet;
-        }
-
-        [HttpGet("BarChart/Rating")]
-        public IEnumerable<BarChartValues> GetBarChart()
-        {
-            var pageSet = _context.StoreApps.GroupBy(q => q.Rating)
-                          .Select(group => new BarChartValues{Value = group.Key.ToString(), Count = group.Count()});
+            var pageSet = _context.StoreApps.Where(q => q.Category.ToUpper() == category.ToUpper())
+                                            .GroupBy(q => q.Rating)
+                                            .Select(group => new BarChartValues{Value = group.Key
+                                            .ToString(), Count = group.Count()});
 
             if (pageSet == null)
             {
@@ -102,7 +92,19 @@ namespace BapApi.Controllers
             return pageSet;
         }
 
+        [HttpGet("CategoryNames")]
+        public IEnumerable<NameModel> GetCategoryNames()
+        {
+            var pageSet = _context.StoreApps.GroupBy(q => q.Category)
+                                            .Select(group => new NameModel { Name = group.Key.ToString() });
+                                            
+            if (pageSet == null)
+            {
+                //return NotFound();
+            }
 
+            return pageSet;
+        }
 
         // POST: api/StoreApps
         // Add a new record to the database
@@ -121,13 +123,6 @@ namespace BapApi.Controllers
                 Category = storeApp.Category,
                 Date = storeApp.Date,
                 Price = storeApp.Price
-            };
-
-        private static BarChartValues BarChartDTO(BarChartValues chartValues) =>
-            new BarChartValues
-            {
-                Value = chartValues.Value,
-                Count = chartValues.Count
             };
 
     }
