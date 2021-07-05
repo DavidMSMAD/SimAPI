@@ -77,6 +77,97 @@ namespace BapApi.Controllers
             return storeTopTenApps;
         }
 
+        [HttpGet("Sort/dsc")]
+        public async Task<ActionResult<IEnumerable<StoreApp>>> GetStoreSortDSC(string column)
+        {
+            var storeTopTenApps = new List<StoreApp>();
+
+            if (column == "rating")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Rating).ToListAsync();
+            }
+
+            if (column == "name")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Name).ToListAsync();
+            }
+
+            if (column == "id")
+            {
+                 storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Id).ToListAsync();
+            }
+
+            if (column == "price")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Price).ToListAsync();
+            }
+
+            if (column == "people")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.People).ToListAsync();
+            }
+            if (column == "category")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Category).ToListAsync();
+            }
+
+
+             if (storeTopTenApps == null)
+             {
+                 return NotFound();
+             }
+
+            return storeTopTenApps;
+
+           
+        }
+
+
+        [HttpGet("Sort/asc")]
+        public async Task<ActionResult<IEnumerable<StoreApp>>> GetStoreSortASC(string column)
+        {
+            var storeTopTenApps = new List<StoreApp>();
+
+            if (column == "rating")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Rating).ToListAsync();
+            }
+
+            if (column == "name")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Name).ToListAsync();
+            }
+
+            if (column == "id")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Id).ToListAsync();
+            }
+
+            if (column == "price")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Price).ToListAsync();
+            }
+
+            if (column == "people")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.People).ToListAsync();
+            }
+            if (column == "category")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Category).ToListAsync();
+            }
+
+
+            if (storeTopTenApps == null)
+            {
+                return NotFound();
+            }
+
+            return storeTopTenApps;
+
+
+        }
+
         [HttpGet("GetPage/{start}")]
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetPageSet(int start)
         {
