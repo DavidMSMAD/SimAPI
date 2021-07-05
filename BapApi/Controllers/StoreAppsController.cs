@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BapApi.Models;
+using System.Net.Http;
 
 namespace BapApi.Controllers
 {
@@ -141,6 +142,30 @@ namespace BapApi.Controllers
 
         // POST: api/StoreApps
         // Add a new record to the database
+        [HttpPost]
+        public async Task<ActionResult<StoreAppDTO>> PostAddApp(StoreAppDTO storeAppDTO)
+        {
+            //var todoItem = new StoreAppDTO
+            var storeApp = new StoreApp
+            {
+                Id = storeAppDTO.Id,
+                Name = storeAppDTO.Name,
+                Rating = storeAppDTO.Rating,
+                People = storeAppDTO.People,
+                Category = storeAppDTO.Category,
+                Date = storeAppDTO.Date,
+                Price = storeAppDTO.Price
+
+            };
+
+            _context.StoreApps.Add(storeApp);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetStoreApp),
+                new { id = storeApp.Id },
+                storeApp);
+        }
 
         // Delete: api/StoreApps/1
         // Delete a single row from the database by Id
