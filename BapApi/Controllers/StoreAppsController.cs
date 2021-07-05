@@ -29,7 +29,7 @@ namespace BapApi.Controllers
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetStoreApps()
         {
             return await _context.StoreApps.Select(x => StoreAppToDTO(x)).ToListAsync();
-        }
+        } 
 
         // GET: api/StoreApps/1
         // Get a single row from the database by Id
@@ -126,6 +126,23 @@ namespace BapApi.Controllers
 
         // Delete: api/StoreApps/1
         // Delete a single row from the database by Id
+        
+        //currently not working
+        //[HttpDelete("{id}")]
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteStoreApps(long id)
+        {
+            var StoreApps = await _context.StoreApps.FindAsync(id);
+            if (StoreApps == null)
+            {
+                return NotFound();
+            }
+            _context.StoreApps.Remove(StoreApps);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         // DTO helper method. "Production apps typically limit the data that's input and returned using a subset of the model"
         private static StoreAppDTO StoreAppToDTO(StoreApp storeApp) =>
