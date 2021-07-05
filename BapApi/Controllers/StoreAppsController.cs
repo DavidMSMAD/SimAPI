@@ -107,6 +107,7 @@ namespace BapApi.Controllers
             return pageSet;
         }
 
+        //Get list of categories
         [HttpGet("CategoryNames")]
         public IEnumerable<NameModel> GetCategoryNames()
         {
