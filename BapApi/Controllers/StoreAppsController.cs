@@ -245,9 +245,11 @@ namespace BapApi.Controllers
         // POST: api/StoreApps
         // Add a new record to the database
         [HttpPost]
+
+        // This line posts posts to the api by calling the object inside the paramters 
         public async Task<ActionResult<StoreAppDTO>> PostAddApp(StoreAppDTO storeAppDTO)
         {
-            //var todoItem = new StoreAppDTO
+            // This creates an object in the api
             var storeApp = new StoreApp
             {
                 Id = storeAppDTO.Id,
@@ -260,9 +262,11 @@ namespace BapApi.Controllers
 
             };
 
+            // this line has the api wait for it to be sent to the api
             _context.StoreApps.Add(storeApp);
             await _context.SaveChangesAsync();
 
+            // This line returns the post that you sent to the api
             return CreatedAtAction(
                 nameof(GetStoreApp),
                 new { id = storeApp.Id },
@@ -272,14 +276,14 @@ namespace BapApi.Controllers
         // Delete: api/StoreApps/1
         // Delete a single row from the database by Id
        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStoreApps(long id)
+        public async Task<IActionResult> DeleteStoreApps(int id)
         {
-            var StoreApps = await _context.StoreApps.FindAsync(id);
-            if (StoreApps == null)
+            var DeleteApp = await _context.StoreApps.FindAsync(id);
+            if (DeleteApp == null)
             {
                 return NotFound();
             }
-            _context.StoreApps.Remove(StoreApps);
+            _context.StoreApps.Remove(DeleteApp);
             await _context.SaveChangesAsync();
 
             return NoContent();
