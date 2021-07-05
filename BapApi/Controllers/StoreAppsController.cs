@@ -157,7 +157,6 @@ namespace BapApi.Controllers
                 storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Category).ToListAsync();
             }
 
-
             if (storeTopTenApps == null)
             {
                 return NotFound();
@@ -168,6 +167,8 @@ namespace BapApi.Controllers
 
         }
 
+        //Get page 
+        //Test comment
         [HttpGet("GetPage/{start}")]
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetPageSet(int start)
         {
