@@ -30,7 +30,7 @@ namespace BapApi.Controllers
         public async Task<ActionResult<IEnumerable<StoreAppDTO>>> GetStoreApps()
         {
             return await _context.StoreApps.Select(x => StoreAppToDTO(x)).ToListAsync();
-        }
+        } 
 
         // GET: api/StoreApps/1
         // Get a single row from the database by Id
@@ -75,6 +75,97 @@ namespace BapApi.Controllers
             }
 
             return storeTopTenApps;
+        }
+
+        [HttpGet("Sort/dsc")]
+        public async Task<ActionResult<IEnumerable<StoreApp>>> GetStoreSortDSC(string column)
+        {
+            var storeTopTenApps = new List<StoreApp>();
+
+            if (column == "rating")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Rating).ToListAsync();
+            }
+
+            if (column == "name")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Name).ToListAsync();
+            }
+
+            if (column == "id")
+            {
+                 storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Id).ToListAsync();
+            }
+
+            if (column == "price")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Price).ToListAsync();
+            }
+
+            if (column == "people")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.People).ToListAsync();
+            }
+            if (column == "category")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderByDescending(x => x.Category).ToListAsync();
+            }
+
+
+             if (storeTopTenApps == null)
+             {
+                 return NotFound();
+             }
+
+            return storeTopTenApps;
+
+           
+        }
+
+
+        [HttpGet("Sort/asc")]
+        public async Task<ActionResult<IEnumerable<StoreApp>>> GetStoreSortASC(string column)
+        {
+            var storeTopTenApps = new List<StoreApp>();
+
+            if (column == "rating")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Rating).ToListAsync();
+            }
+
+            if (column == "name")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Name).ToListAsync();
+            }
+
+            if (column == "id")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Id).ToListAsync();
+            }
+
+            if (column == "price")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Price).ToListAsync();
+            }
+
+            if (column == "people")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.People).ToListAsync();
+            }
+            if (column == "category")
+            {
+                storeTopTenApps = await _context.StoreApps.OrderBy(x => x.Category).ToListAsync();
+            }
+
+
+            if (storeTopTenApps == null)
+            {
+                return NotFound();
+            }
+
+            return storeTopTenApps;
+
+
         }
 
         [HttpGet("GetPage/{start}")]
@@ -170,6 +261,20 @@ namespace BapApi.Controllers
 
         // Delete: api/StoreApps/1
         // Delete a single row from the database by Id
+       [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStoreApps(long id)
+        {
+            var StoreApps = await _context.StoreApps.FindAsync(id);
+            if (StoreApps == null)
+            {
+                return NotFound();
+            }
+            _context.StoreApps.Remove(StoreApps);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         // DTO helper method. "Production apps typically limit the data that's input and returned using a subset of the model"
         private static StoreAppDTO StoreAppToDTO(StoreApp storeApp) =>
